@@ -1,0 +1,57 @@
+{
+  "name": "walk",
+  "loop_mode": "LOOP",
+  "duration": 0.8,
+  "keyframes": [
+    {
+      "time": 0.0,
+      "angles": {
+        "torso": 2, "head": -1,
+        "upper_arm_l": 178, "lower_arm_l": 10,
+        "upper_arm_r": 182, "lower_arm_r": -5,
+        "upper_leg_l": 198, "lower_leg_l": 8,
+        "upper_leg_r": 160, "lower_leg_r": 5
+      }
+    },
+    {
+      "time": 0.25,
+      "angles": {
+        "torso": 1, "head": 0,
+        "upper_arm_l": 191, "lower_arm_l": 5,
+        "upper_arm_r": 169, "lower_arm_r": -5,
+        "upper_leg_l": 172, "lower_leg_l": 28,
+        "upper_leg_r": 178, "lower_leg_r": 10
+      }
+    },
+    {
+      "time": 0.5,
+      "angles": {
+        "torso": 2, "head": -1,
+        "upper_arm_l": 202, "lower_arm_l": 5,
+        "upper_arm_r": 158, "lower_arm_r": -10,
+        "upper_leg_l": 160, "lower_leg_l": 5,
+        "upper_leg_r": 198, "lower_leg_r": 8
+      }
+    },
+    {
+      "time": 0.75,
+      "angles": {
+        "torso": 1, "head": 0,
+        "upper_arm_l": 189, "lower_arm_l": 5,
+        "upper_arm_r": 171, "lower_arm_r": -5,
+        "upper_leg_l": 178, "lower_leg_l": 10,
+        "upper_leg_r": 172, "lower_leg_r": 28
+      }
+    },
+    {
+      "time": 1.0,
+      "angles": {
+        "torso": 2, "head": -1,
+        "upper_arm_l": 178, "lower_arm_l": 10,
+        "upper_arm_r": 182, "lower_arm_r": -5,
+        "upper_leg_l": 198, "lower_leg_l": 8,
+        "upper_leg_r": 160, "lower_leg_r": 5
+      }
+    }
+  ]
+}

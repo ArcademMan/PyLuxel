@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyluxel"
+version = "0.2.0"
+description = "Python Engine for pygame-ce and modernGL. Is not good as you might think."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "ArcademMan" },
+]
+keywords = ["game-engine", "2d", "pygame", "moderngl", "opengl"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Games/Entertainment",
+    "Topic :: Multimedia :: Graphics",
+]
+dependencies = [
+    "pygame-ce>=2.4.0",
+    "moderngl>=5.8.0",
+    "numpy>=1.24.0",
+]
+
+[project.scripts]
+pyluxel = "pyluxel.__main__:main"
+
+[project.urls]
+Homepage = "https://github.com/ArcademMan/PyLuxel"
+Repository = "https://github.com/ArcademMan/PyLuxel"
+
+[tool.setuptools.packages.find]
+include = ["pyluxel*"]
+
+[tool.setuptools.package-data]
+pyluxel = ["shaders/*.vert", "shaders/*.frag", "animation/anims/*.json", "ps_glyphs/**/*.png"]

@@ -1,0 +1,3 @@
+pygame-ce>=2.4.0
+moderngl>=5.8.0
+numpy>=1.24.0

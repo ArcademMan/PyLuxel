@@ -1,0 +1,67 @@
+{
+  "name": "jump_1",
+  "loop_mode": "LOOP",
+  "duration": 0.45,
+  "keyframes": [
+    {
+      "time": 0.07,
+      "angles": {
+        "torso": 11.7,
+        "head": 38.1,
+        "upper_arm_l": 172.3,
+        "lower_arm_l": -96.9,
+        "upper_arm_r": 152.8,
+        "lower_arm_r": -117.7,
+        "upper_leg_l": 162.1,
+        "lower_leg_l": 40.3,
+        "upper_leg_r": 133.3,
+        "lower_leg_r": 68.9
+      }
+    },
+    {
+      "time": 0.3,
+      "angles": {
+        "torso": 15.6,
+        "head": 43.5,
+        "upper_arm_l": 162.0,
+        "lower_arm_l": -96.9,
+        "upper_arm_r": 142.7,
+        "lower_arm_r": -109.3,
+        "upper_leg_l": 170.7,
+        "lower_leg_l": 26.9,
+        "upper_leg_r": 140.0,
+        "lower_leg_r": 61.2
+      }
+    },
+    {
+      "time": 0.64,
+      "angles": {
+        "torso": 17.4,
+        "head": 39.1,
+        "upper_arm_l": 168.5,
+        "lower_arm_l": -78.2,
+        "upper_arm_r": 153.7,
+        "lower_arm_r": -83.8,
+        "upper_leg_l": 150.7,
+        "lower_leg_l": 40.3,
+        "upper_leg_r": 148.2,
+        "lower_leg_r": 68.9
+      }
+    },
+    {
+      "time": 0.97,
+      "angles": {
+        "torso": 11.7,
+        "head": 38.1,
+        "upper_arm_l": 172.3,
+        "lower_arm_l": -96.9,
+        "upper_arm_r": 152.8,
+        "lower_arm_r": -117.7,
+        "upper_leg_l": 162.1,
+        "lower_leg_l": 40.3,
+        "upper_leg_r": 133.3,
+        "lower_leg_r": 68.9
+      }
+    }
+  ]
+}
