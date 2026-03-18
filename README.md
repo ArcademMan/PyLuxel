@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/ArcademMan/PyLuxel/main/PyLuxel.png" alt="PyLuxel" width="400">
+  <img src="https://raw.githubusercontent.com/ArcademMan/PyLuxel/master/PyLuxel.png" alt="PyLuxel" width="400">
 </p>
 
 <h1 align="center">PyLuxel</h1>
