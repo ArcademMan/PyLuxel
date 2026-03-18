@@ -13,7 +13,10 @@
   <img src="https://img.shields.io/badge/python-3.10+-blue.svg" alt="Python 3.10+">
   <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="MIT License">
   <img src="https://img.shields.io/badge/version-0.2.0-orange.svg" alt="Version">
+  <img src="https://img.shields.io/badge/status-alpha-red.svg" alt="Alpha">
 </p>
+
+> **Note:** PyLuxel is under active development. APIs may change between versions. Not yet recommended for production use.
 
 ---
 
