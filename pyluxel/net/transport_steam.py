@@ -172,13 +172,19 @@ class SteamTransport(Transport):
             if self._lobby_id:
                 self.leave_lobby()
             for steam_id in list(self._peers.values()):
-                self._send_internal(steam_id, b"\x04")
+                try:
+                    self._send_internal(steam_id, b"\x04")
+                except Exception:
+                    pass
                 if self._p2p:
-                    self._p2p.close_session(steam_id)
+                    try:
+                        self._p2p.close_session(steam_id)
+                    except Exception:
+                        pass
             self._peers.clear()
             self._steam_to_peer.clear()
-            self._steam.shutdown()
-            self._steam = None
+            # Non chiamare steam.shutdown(): l'API Steam deve restare viva
+            # per permettere re-host/re-join senza reinizializzare tutto.
         self._connected = False
 
     def get_local_address(self) -> tuple[str, int]:

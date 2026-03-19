@@ -104,8 +104,10 @@ class EventBus:
         """
         entries = self._listeners[event]
         # Prevent double-subscribe of the same listener
+        # Uses == instead of `is` because bound methods create new objects
+        # on each attribute access (self.method is self.method → False)
         for e in entries:
-            if e.listener is listener:
+            if e.listener == listener:
                 return listener
         insort_right(entries, _Entry(priority, listener))
         return listener
@@ -127,7 +129,7 @@ class EventBus:
             return
         for i, e in enumerate(entries):
             lsn = e.listener
-            if lsn is listener or (isinstance(lsn, _OnceWrapper) and lsn.fn is listener):
+            if lsn == listener or (isinstance(lsn, _OnceWrapper) and lsn.fn == listener):
                 entries.pop(i)
                 break
         if not entries:

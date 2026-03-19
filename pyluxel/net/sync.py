@@ -216,6 +216,12 @@ def apply_sync_packet(manager, peer_id: int, payload: bytes):
     if obj is None:
         return
 
+    # Ignora STATE_SYNC per oggetti di cui siamo proprietari:
+    # il proprietario e' l'autorita', non deve essere sovrascritto da remoto
+    owner = getattr(obj, "_net_owner", -1)
+    if owner == manager._local_id:
+        return
+
     # Sequence check: scarta pacchetti piu' vecchi dell'ultimo ricevuto
     if hasattr(obj, "_net_sync_recv_seq"):
         if not _seq_newer(seq, obj._net_sync_recv_seq):
