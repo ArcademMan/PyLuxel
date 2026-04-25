@@ -57,6 +57,49 @@ Initializes the transport without connecting. Useful to have `Net.local_name` (S
 
 ---
 
+## Configuration
+
+`Net.configure()` lets you change global defaults once at startup, so you don't have to pass `transport=` to every `host()` / `join()` call. Call it **before** any `init()` / `host()` / `join()`. Idempotent.
+
+```python
+Net.configure(steam=False)                     # disable Steam entirely (default_transport falls back to "udp")
+Net.configure(steam=False, default_transport="udp")
+Net.configure(default_transport="steam")       # explicit
+```
+
+| Param | Type | Default | Description |
+|-------|------|---------|-------------|
+| `steam` | `bool` | `True` | If `False`, calling `transport="steam"` raises `RuntimeError` and `steam_api64.dll` is never loaded. |
+| `default_transport` | `str \| None` | `None` | Transport used by `host/join/init` when `transport=` is not passed. If `None`, it's inferred: `"steam"` if `steam=True`, otherwise `"udp"`. |
+
+**If you never call `configure()`, behavior is unchanged: Steam is the default**, with silent fallback to UDP if `steam_api64.dll` is missing.
+
+### When to disable Steam
+
+- Your game ships without Steam integration (LAN-only, dedicated server, custom backend)
+- You want a clean error if any code path accidentally requests Steam
+- You don't want the DLL probed at runtime on end-user machines
+
+```python
+from pyluxel import Net
+
+Net.configure(steam=False)
+Net.host()                    # uses "udp" automatically
+Net.join("127.0.0.1")         # uses "udp" automatically
+Net.host(transport="steam")   # → RuntimeError: Steam disabled
+```
+
+### Reading the config
+
+```python
+Net.steam_enabled       # bool
+Net.default_transport   # str ("steam" | "udp" | ...)
+```
+
+Useful in UI code to show/hide "Play with Steam friends" buttons.
+
+---
+
 ## Transport
 
 Two transports available. The API is identical -- just change the `transport` parameter.
@@ -470,6 +513,8 @@ Stats are updated once per second during `Net.poll()`.
 ## Properties
 
 ```python
+Net.steam_enabled -> bool    # True if Steam is enabled (see configure())
+Net.default_transport -> str # Default transport used by host/join/init
 Net.is_host -> bool          # True if hosting
 Net.is_connected -> bool     # True if connected
 Net.local_id -> int          # Our peer ID (host = 0)

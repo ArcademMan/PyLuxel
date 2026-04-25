@@ -164,7 +164,10 @@ class LobbyManager:
 
         transport_kind = self._net._transport_kind
 
-        if transport_kind == "steam" or (not transport_kind and self._net._transport is None):
+        if transport_kind == "steam" or (
+                not transport_kind
+                and self._net._transport is None
+                and self._net._default_transport == "steam"):
             # Steam: il codice e' il lobby_id
             try:
                 lobby_id = int(code)

@@ -86,11 +86,45 @@ class NetworkManager:
         # Lobby
         self._lobby = None
 
+        # Configurazione transport
+        self._steam_enabled: bool = True
+        self._default_transport: str = "steam"
+
+    # ------------------------------------------------------------------
+    # Configurazione
+    # ------------------------------------------------------------------
+
+    def configure(self, *, steam: bool = True,
+                  default_transport: str | None = None) -> None:
+        """Configura globalmente il networking.
+
+        Chiamare prima di host/join/init. Idempotente.
+
+        Args:
+            steam: Se False, disabilita Steam: ``transport="steam"`` lancia
+                RuntimeError e la DLL non viene mai caricata. Default True.
+            default_transport: Transport usato da host/join/init quando
+                l'utente non passa ``transport=`` esplicito. Se None, viene
+                dedotto: ``"steam"`` se ``steam=True``, altrimenti ``"udp"``.
+        """
+        self._steam_enabled = steam
+        if default_transport is not None:
+            if not steam and default_transport == "steam":
+                cprint.warning(
+                    "Net.configure: default_transport='steam' incoerente con "
+                    "steam=False. Forzo a 'udp'."
+                )
+                self._default_transport = "udp"
+            else:
+                self._default_transport = default_transport
+        elif not steam and self._default_transport == "steam":
+            self._default_transport = "udp"
+
     # ------------------------------------------------------------------
     # Lifecycle
     # ------------------------------------------------------------------
 
-    def init(self, *, transport: str = "steam", app_id: int = 480) -> None:
+    def init(self, *, transport: str | None = None, app_id: int = 480) -> None:
         """Inizializza il transport senza connettersi.
 
         Utile per avere ``local_name`` disponibile prima di host/join.
@@ -98,58 +132,63 @@ class NetworkManager:
         """
         if self._transport is not None:
             return
-        self._transport = self._create_transport(transport, app_id)
-        self._transport_kind = transport
+        kind = transport if transport is not None else self._default_transport
+        self._transport = self._create_transport(kind, app_id)
+        self._transport_kind = kind
         # Forza l'init immediato (es. Steam) cosi' local_name e' disponibile
         if hasattr(self._transport, "_init_steam"):
             self._transport._init_steam()
 
-    def host(self, port: int = 7777, *, transport: str = "steam",
+    def host(self, port: int = 7777, *, transport: str | None = None,
              app_id: int = 480) -> None:
         """Avvia come host.
 
         Args:
             port: Porta UDP (ignorata con Steam).
-            transport: "steam" o "udp".
+            transport: "steam" o "udp". Se None, usa il default configurato
+                via :meth:`configure` (default ``"steam"``).
             app_id: Steam App ID (default 480 = Spacewar).
         """
         if self._connected:
             cprint.warning("Net: gia' connesso, disconnetti prima.")
             return
 
+        kind = transport if transport is not None else self._default_transport
         if self._transport is None:
-            self._transport = self._create_transport(transport, app_id)
+            self._transport = self._create_transport(kind, app_id)
         self._transport.listen(port)
         self._is_host = True
         self._local_id = 0  # host e' sempre 0
         self._connected = True
-        self._transport_kind = transport
-        cprint.info(f"Net: hosting su porta {port} ({transport})")
+        self._transport_kind = kind
+        cprint.info(f"Net: hosting su porta {port} ({kind})")
 
         # Auto-create nodo locale se factory registrata
         self._auto_create_node(self._local_id)
 
     def join(self, address: str = "127.0.0.1", port: int = 7777, *,
-             transport: str = "steam", app_id: int = 480) -> None:
+             transport: str | None = None, app_id: int = 480) -> None:
         """Connettiti a un host.
 
         Args:
             address: IP dell'host.
             port: Porta UDP.
-            transport: "steam" o "udp".
+            transport: "steam" o "udp". Se None, usa il default configurato
+                via :meth:`configure` (default ``"steam"``).
             app_id: Steam App ID.
         """
         if self._connected:
             cprint.warning("Net: gia' connesso, disconnetti prima.")
             return
 
+        kind = transport if transport is not None else self._default_transport
         if self._transport is None:
-            self._transport = self._create_transport(transport, app_id)
+            self._transport = self._create_transport(kind, app_id)
         self._transport.connect(address, port)
         self._is_host = False
         self._connected = True
-        self._transport_kind = transport
-        cprint.info(f"Net: connessione a {address}:{port} ({transport})")
+        self._transport_kind = kind
+        cprint.info(f"Net: connessione a {address}:{port} ({kind})")
 
     def disconnect(self) -> None:
         """Disconnetti e chiudi il transport."""
@@ -619,6 +658,16 @@ class NetworkManager:
     # ------------------------------------------------------------------
 
     @property
+    def steam_enabled(self) -> bool:
+        """True se Steam e' abilitato (default). Vedi :meth:`configure`."""
+        return self._steam_enabled
+
+    @property
+    def default_transport(self) -> str:
+        """Transport usato di default da host/join/init. Vedi :meth:`configure`."""
+        return self._default_transport
+
+    @property
     def is_host(self) -> bool:
         return self._is_host
 
@@ -750,6 +799,11 @@ class NetworkManager:
             return UDPTransport()
 
         if kind == "steam":
+            if not self._steam_enabled:
+                raise RuntimeError(
+                    "Net: Steam transport disabilitato via Net.configure(steam=False). "
+                    "Usa un transport diverso (es. 'udp') o riabilita Steam."
+                )
             try:
                 from pyluxel.net.transport_steam import SteamTransport
                 return SteamTransport(app_id=app_id)
