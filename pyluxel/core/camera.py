@@ -1,3 +1,6 @@
+import math
+
+
 class Camera:
     """Camera 2D con smooth follow e clamping ai bordi della mappa."""
 
@@ -53,9 +56,14 @@ class Camera:
             self.y = goal_y
 
     def apply(self, world_x: float, world_y: float) -> tuple[float, float]:
-        """Converte coordinate mondo → coordinate schermo."""
-        return ((world_x - self.x - self._shake_x) * self._zoom,
-                (world_y - self.y - self._shake_y) * self._zoom)
+        """Converte coordinate mondo → coordinate schermo.
+
+        Snap a pixel intero per evitare seam tra tile e mismatch di sub-pixel
+        tra elementi diversi (player vs foreground tiles).
+        """
+        sx = (world_x - self.x - self._shake_x) * self._zoom
+        sy = (world_y - self.y - self._shake_y) * self._zoom
+        return math.floor(sx), math.floor(sy)
 
     def set_position(self, x: float, y: float):
         """Imposta direttamente la posizione della camera (snap senza follow)."""

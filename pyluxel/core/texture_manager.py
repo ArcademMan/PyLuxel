@@ -35,6 +35,8 @@ class TextureManager:
 
         texture = self.ctx.texture((w, h), 4, data)
         texture.filter = (moderngl.NEAREST, moderngl.NEAREST)
+        texture.repeat_x = False
+        texture.repeat_y = False
         texture.swizzle = "RGBA"
         return texture
 
